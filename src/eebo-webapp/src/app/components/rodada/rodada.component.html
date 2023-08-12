@@ -1,0 +1,89 @@
+<div>
+  <!-- <span class="block text-6xl font-bold mb-1">{{ rodada.nome }}</span> -->
+</div>
+<div *ngIf="rodada.emExecucao">
+  <h1>em execução</h1>
+  <span class="text-8xl font-bold">{{ rodada.emExecucao.nome }}</span>
+</div>
+<div *ngIf="rodada.proxima">
+  <h2>próxima</h2>
+  <span class="text-5xl font-bold">{{ rodada.proxima.nome }}</span>
+</div>
+
+<div class="card mt-5">
+  <div class="grid">
+    <div clas="col-3">
+      <div class="card">
+        <p-table
+          [styleClass]="'p-datatable-sm'"
+          dataKey="nome"
+          [value]="participantesSorteio"
+        >
+          <ng-template pTemplate="caption">
+            <div *ngIf="participantesSorteio.length" class="flex">
+              <button
+                pButton
+                label="Próxima"
+                class="p-button-outlined"
+                icon="pi pi-caret-right"
+                (click)="sortearProxima()"
+              ></button>
+
+              <button
+                pButton
+                label="Execução"
+                class="p-button-outlined"
+                icon="pi pi-forward"
+                (click)="promoverEmExecucao()"
+              ></button>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Sorteio ({{ this.participantesSorteio.length }})</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-item>
+            <tr>
+              <td>{{ item.nome }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+
+    <div clas=" col-3">
+      <div class="card">
+        <p-table
+          [styleClass]="'p-datatable-sm'"
+          dataKey="nome"
+          [value]="jaSorteadas"
+        >
+          <ng-template pTemplate="caption">
+            <div *ngIf="jaSorteadas.length" class="flex">
+              <button
+                pButton
+                label="Desazer execução"
+                class="p-button-outlined p-button-warning"
+                icon="pi pi-caret-left"
+                (click)="desfazerProxima()"
+              ></button>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Já Sorteadas ({{ this.jaSorteadas.length }})</th>
+              <th>Ordem</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-item>
+            <tr>
+              <td>{{ item.nome }}</td>
+              <td>{{ item.ordemSorteio }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
