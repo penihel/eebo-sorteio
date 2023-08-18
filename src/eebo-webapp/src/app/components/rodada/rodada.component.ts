@@ -32,6 +32,10 @@ export class RodadaComponent implements OnInit {
     this.jaSorteadas = this.jaSorteadas.sort((a, b) =>
       (a.ordemSorteio || 0) > (b.ordemSorteio || 0) ? -1 : 1
     );
+
+    if (!this.jaSorteadas.length) {
+      this.rodada.proxima = undefined;
+    }
   }
   sortearProxima() {
     var indexSorteado = Math.floor(
