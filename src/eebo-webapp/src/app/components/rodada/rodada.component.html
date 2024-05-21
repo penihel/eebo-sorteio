@@ -3,7 +3,12 @@
 </div>
 <div *ngIf="rodada.emExecucao">
   <h1>em execução</h1>
-  <span class="text-8xl font-bold">{{ rodada.emExecucao.nome }}</span>
+  <span class="text-8xl font-bold">{{ rodada.emExecucao.nome }}</span><br>
+  <span *ngIf="rodada.emExecucao.nomeMusica" class="text-8xl font-bold">{{
+    rodada.emExecucao.nomeMusica }}</span><br />
+  <span *ngIf="rodada.emExecucao.nomeArranjador" class="text-6xl font-bold">Arr: {{ rodada.emExecucao.nomeArranjador
+    }}</span><br />
+  <span *ngIf="rodada.emExecucao.nomeRegente" class="text-4xl font-bold">Reg: {{ rodada.emExecucao.nomeRegente }}</span>
 </div>
 <div *ngIf="rodada.proxima">
   <h2>próxima</h2>
@@ -14,28 +19,14 @@
   <div class="grid">
     <div clas="col-3">
       <div class="card">
-        <p-table
-          [styleClass]="'p-datatable-sm'"
-          dataKey="nome"
-          [value]="participantesSorteio"
-        >
+        <p-table [styleClass]="'p-datatable-sm'" dataKey="nome" [value]="participantesSorteio">
           <ng-template pTemplate="caption">
             <div *ngIf="participantesSorteio.length" class="flex">
-              <button
-                pButton
-                label="Próxima"
-                class="p-button-outlined"
-                icon="pi pi-caret-right"
-                (click)="sortearProxima()"
-              ></button>
+              <button pButton label="Próxima" class="p-button-outlined" icon="pi pi-caret-right"
+                (click)="sortearProxima()"></button>
 
-              <button
-                pButton
-                label="Execução"
-                class="p-button-outlined"
-                icon="pi pi-forward"
-                (click)="promoverEmExecucao()"
-              ></button>
+              <button pButton label="Execução" class="p-button-outlined" icon="pi pi-forward"
+                (click)="promoverEmExecucao()"></button>
             </div>
           </ng-template>
           <ng-template pTemplate="header">
@@ -54,20 +45,11 @@
 
     <div clas=" col-3">
       <div class="card">
-        <p-table
-          [styleClass]="'p-datatable-sm'"
-          dataKey="nome"
-          [value]="jaSorteadas"
-        >
+        <p-table [styleClass]="'p-datatable-sm'" dataKey="nome" [value]="jaSorteadas">
           <ng-template pTemplate="caption">
             <div *ngIf="jaSorteadas.length" class="flex">
-              <button
-                pButton
-                label="Desfazer execução"
-                class="p-button-outlined p-button-warning"
-                icon="pi pi-caret-left"
-                (click)="desfazerProxima()"
-              ></button>
+              <button pButton label="Desfazer execução" class="p-button-outlined p-button-warning"
+                icon="pi pi-caret-left" (click)="desfazerProxima()"></button>
             </div>
           </ng-template>
           <ng-template pTemplate="header">
@@ -87,3 +69,33 @@
     </div>
   </div>
 </div>
+
+<p-dialog *ngIf="modalExecucao" [header]="'Confirmando execução '" [modal]="true" [(visible)]="modalExecucao"
+  [style]="{ width: '50vw' }">
+  <div class="flex align-items-center gap-3 mb-3">
+    <strong>
+      {{orquestraModal.nome}}
+    </strong>
+  </div>
+
+  <span class="p-text-secondary block mb-5">Informe os dados da música.</span>
+
+
+  <div class="flex align-items-center gap-3 mb-3">
+    <label for="username" class="font-semibold w-6rem">Música</label>
+    <input [(ngModel)]="orquestraModal.nomeMusica" pInputText id="username" class="flex-auto" autocomplete="off" />
+  </div>
+  <div class="flex align-items-center gap-3 mb-5">
+    <label for="email" class="font-semibold w-6rem">Arranjador</label>
+    <input [(ngModel)]="orquestraModal.nomeArranjador" pInputText id="email" class="flex-auto" autocomplete="off" />
+  </div>
+  <div class="flex align-items-center gap-3 mb-5">
+    <label for="email" class="font-semibold w-6rem">Regente</label>
+    <input [(ngModel)]="orquestraModal.nomeRegente" pInputText id="email" class="flex-auto" autocomplete="off" />
+  </div>
+  <div class="flex justify-content-end gap-2">
+    <button pButton class="p-button-outlined p-button-secondary" label="Cancelar" type="button"
+      (click)="modalExecucao = false"></button>
+    <p-button label="Confirmar" (click)="salvarModal()" />
+  </div>
+</p-dialog>

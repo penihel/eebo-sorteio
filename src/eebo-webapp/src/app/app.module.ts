@@ -14,6 +14,9 @@ import { TableModule } from 'primeng/table';
 import { MessagesModule } from 'primeng/messages';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+
+
 import { RodadaComponent } from './components/rodada/rodada.component';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { SorteioComponent } from './components/sorteio/sorteio.component';
@@ -34,6 +37,7 @@ import { SorteioComponent } from './components/sorteio/sorteio.component';
     MessagesModule,
     ConfirmDialogModule,
     InputTextareaModule,
+    DialogModule,
   ],
   providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent],

@@ -9,7 +9,7 @@ import { RodadaService } from 'src/app/services/rodada.service';
   styleUrls: ['./rodada.component.scss'],
 })
 export class RodadaComponent implements OnInit {
-  constructor(private rodadaService: RodadaService) {}
+  constructor(private rodadaService: RodadaService) { }
   @Input('rodada') rodada!: Rodada;
 
   participantesSorteio!: Orquestra[];
@@ -37,39 +37,68 @@ export class RodadaComponent implements OnInit {
       this.rodada.proxima = undefined;
     }
   }
-  sortearProxima() {
-    var indexSorteado = Math.floor(
-      Math.random() * this.participantesSorteio.length
-    );
+  sortearProxima(overrideConfirma: boolean = false) {
 
-    var sorteada = this.participantesSorteio[indexSorteado];
-    this.rodada.proxima = sorteada;
+    var c = true;
+    if (this.rodada.proxima && !overrideConfirma) {
+      c = confirm('Deseja realmente alterar a próxima sorteada?');
+    }
 
-    this.salvarSorteio();
+    if (c) {
+      var indexSorteado = Math.floor(
+        Math.random() * this.participantesSorteio.length
+      );
+
+      var sorteada = this.participantesSorteio[indexSorteado];
+      this.rodada.proxima = sorteada;
+
+      this.salvarSorteio();
+    }
+
   }
 
+  modalExecucao: boolean = false;
+  orquestraModal!: Orquestra;
+  indexSorteado!: number;
   promoverEmExecucao() {
-    var indexSorteado = this.participantesSorteio.findIndex(
+    
+    this.indexSorteado = this.participantesSorteio.findIndex(
       (o) => o.nome == this.rodada.proxima?.nome
     );
 
-    if (indexSorteado < 0) return;
+    if (this.indexSorteado < 0) return;
 
     var sorteada = this.participantesSorteio.find(
       (o) => o.nome == this.rodada.proxima?.nome
     );
 
-    this.participantesSorteio.splice(indexSorteado, 1);
 
     if (sorteada) {
-      sorteada.ordemSorteio = this.jaSorteadas.length + 1;
 
-      this.jaSorteadas.unshift(sorteada);
+      this.orquestraModal = sorteada;
+      this.modalExecucao = true;
 
-      this.rodada.emExecucao = sorteada;
-
-      this.sortearProxima();
     }
+  }
+
+  salvarModal() {
+
+
+    this.participantesSorteio.splice(this.indexSorteado, 1);
+
+    var sorteada = this.orquestraModal;
+
+    sorteada.ordemSorteio = this.jaSorteadas.length + 1;
+
+    this.jaSorteadas.unshift(sorteada);
+
+    this.rodada.emExecucao = sorteada;
+
+    this.sortearProxima(true);
+
+    this.modalExecucao = false;
+
+
   }
 
   desfazerProxima() {
